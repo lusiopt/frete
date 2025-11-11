@@ -22,3 +22,17 @@
   --color-ring: hsl(221.2 83.2% 53.3%);
   --radius: 0.5rem;
 }
+
+@layer base {
+  /* Checkboxes e radio buttons com tema blue */
+  input[type="checkbox"],
+  input[type="radio"] {
+    accent-color: hsl(221.2 83.2% 53.3%);
+  }
+
+  input[type="checkbox"]:checked,
+  input[type="radio"]:checked {
+    background-color: hsl(221.2 83.2% 53.3%);
+    border-color: hsl(221.2 83.2% 53.3%);
+  }
+}
