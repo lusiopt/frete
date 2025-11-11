@@ -151,7 +151,7 @@ export function QuotationResults({ data }: QuotationResultsProps) {
                   <div>
                     <p className="text-xs text-slate-500">Peso</p>
                     <p className="font-semibold">
-                      {formatWeight(carrier.weight_details.weight, data.data.measurement as "metric" | "imperial")}
+                      {formatWeight(carrier.weight_details.weight)}
                     </p>
                   </div>
                 </div>
