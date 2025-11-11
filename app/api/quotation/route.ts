@@ -5,6 +5,10 @@ export async function POST(request: NextRequest) {
   try {
     const body: QuotationRequest = await request.json();
 
+    // DEBUG: Log do payload recebido do frontend
+    console.log("🔍 [BACKEND] Payload recebido do frontend:");
+    console.log(JSON.stringify(body, null, 2));
+
     const apiKey = process.env.SHIPSMART_API_KEY;
     const apiUrl = process.env.SHIPSMART_API_URL;
 
@@ -18,6 +22,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // DEBUG: Log do payload que será enviado para ShipSmart
+    console.log("📤 [BACKEND] Enviando para ShipSmart API:", `${apiUrl}/quotation`);
+    console.log(JSON.stringify(body, null, 2));
+
     const response = await fetch(`${apiUrl}/quotation`, {
       method: "POST",
       headers: {
@@ -30,7 +38,18 @@ export async function POST(request: NextRequest) {
 
     const data: QuotationResponse = await response.json();
 
+    // DEBUG: Log da resposta da ShipSmart
+    console.log("📥 [BACKEND] Resposta da ShipSmart API:");
+    console.log("Status HTTP:", response.status);
+    console.log("Response OK?", response.ok);
+    console.log("Data:", JSON.stringify(data, null, 2));
+
     if (!response.ok) {
+      console.error("❌ [BACKEND] Erro da ShipSmart API:");
+      console.error("Status:", response.status);
+      console.error("Message:", data.message);
+      console.error("Data completo:", JSON.stringify(data, null, 2));
+
       return NextResponse.json(
         {
           status: "error",
@@ -41,9 +60,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    console.log("✅ [BACKEND] Sucesso! Retornando dados ao frontend");
     return NextResponse.json(data);
   } catch (error) {
-    console.error("Error fetching quotation:", error);
+    console.error("❌ [BACKEND] Exceção capturada:", error);
+    console.error("Tipo:", typeof error);
+    console.error("Stack:", error instanceof Error ? error.stack : "N/A");
     return NextResponse.json(
       {
         status: "error",

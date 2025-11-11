@@ -24,8 +24,8 @@ interface QuotationFormProps {
 
 export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFormProps) {
   const [formData, setFormData] = useState<Partial<QuotationRequest>>({
-    object: "not_doc",
-    type: "advanced",
+    object: "doc",
+    type: "simple",
     tax: "sender",
     insurance: false,
     currency_quote: "USD",
@@ -34,12 +34,12 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
     residential_delivery: false,
     non_stackable: false,
     address_sender: {
-      country_code: "US",
-      state_code: "CA",
+      country_code: "BR",
+      state_code: "CE",
     },
     address_receiver: {
-      country_code: "BR",
-      state_code: "SP",
+      country_code: "PT",
+      state_code: "11",
     },
     boxes: [
       {
@@ -68,6 +68,7 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
       width: 15,
       depth: 20,
       weight: 2.5,
+      price: 10,
     },
   ]);
 
@@ -102,6 +103,7 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
               width: parseFloat(dims[0]),
               depth: parseFloat(dims[1]),
               weight: 0.1, // Peso padrão para envelope (100g)
+              price: 10, // Valor padrão da caixa
             };
             return updatedBoxes;
           });
@@ -164,11 +166,18 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
     setIsLoading(true);
 
     try {
+      // DEBUG: Log do estado boxes antes de construir o payload
+      console.log("🔍 DEBUG - Estado boxes:", JSON.stringify(boxes, null, 2));
+      console.log("🔍 DEBUG - boxes[0].price:", boxes[0]?.price);
+
       const payload: QuotationRequest = {
         ...formData,
         boxes,
         items: (formData.type === "advanced" || formData.type === "items") && formData.object !== "doc" ? items : undefined,
       } as QuotationRequest;
+
+      // DEBUG: Log do payload completo
+      console.log("📤 DEBUG - Payload enviado:", JSON.stringify(payload, null, 2));
 
       const response = await fetch("/api/quotation", {
         method: "POST",
@@ -180,14 +189,22 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
 
       const data: QuotationResponse = await response.json();
 
+      // DEBUG: Log da resposta completa
+      console.log("📥 DEBUG - Resposta completa:", JSON.stringify(data, null, 2));
+
       if (data.status === "success") {
         onSubmit(data);
       } else {
-        console.error("Error:", data.message);
+        console.error("❌ DEBUG - Erro retornado pela API:");
+        console.error("Status:", data.status);
+        console.error("Message:", data.message);
+        console.error("Data completo:", JSON.stringify(data, null, 2));
         alert(`Erro: ${data.message}`);
       }
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("❌ DEBUG - Exceção capturada:", error);
+      console.error("Tipo do erro:", typeof error);
+      console.error("Erro stringified:", JSON.stringify(error, null, 2));
       alert("Erro ao enviar cotação");
     } finally {
       setIsLoading(false);
