@@ -1,0 +1,548 @@
+"use client";
+
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Plus, Trash2, Package } from "lucide-react";
+import type { QuotationRequest, QuotationResponse, Box, Item } from "@/types/shipsmart";
+
+interface QuotationFormProps {
+  onSubmit: (data: QuotationResponse) => void;
+  isLoading: boolean;
+  setIsLoading: (loading: boolean) => void;
+}
+
+export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFormProps) {
+  const [formData, setFormData] = useState<Partial<QuotationRequest>>({
+    object: "not_doc",
+    type: "advanced",
+    tax: "sender",
+    insurance: false,
+    currency_quote: "USD",
+    currency_payment: "BRL",
+    measurement: "metric",
+    residential_delivery: false,
+    non_stackable: false,
+    address_sender: {
+      country_code: "US",
+      state_code: "CA",
+    },
+    address_receiver: {
+      country_code: "BR",
+      state_code: "SP",
+    },
+    boxes: [
+      {
+        name: "Caixa 1",
+        height: 10,
+        width: 15,
+        depth: 20,
+        weight: 2.5,
+      },
+    ],
+    items: [
+      {
+        name: "Item 1",
+        quantity: 1,
+        unit_value: 50,
+        weight: 2.5,
+      },
+    ],
+  });
+
+  const [boxes, setBoxes] = useState<Box[]>([
+    {
+      name: "Caixa 1",
+      height: 10,
+      width: 15,
+      depth: 20,
+      weight: 2.5,
+    },
+  ]);
+
+  const [items, setItems] = useState<Item[]>([
+    {
+      name: "Item 1",
+      quantity: 1,
+      unit_value: 50,
+      weight: 2.5,
+    },
+  ]);
+
+  const addBox = () => {
+    const newBox: Box = {
+      name: `Caixa ${boxes.length + 1}`,
+      height: 10,
+      width: 15,
+      depth: 20,
+      weight: 2.5,
+    };
+    setBoxes([...boxes, newBox]);
+  };
+
+  const removeBox = (index: number) => {
+    if (boxes.length > 1) {
+      setBoxes(boxes.filter((_, i) => i !== index));
+    }
+  };
+
+  const updateBox = (index: number, field: keyof Box, value: string | number) => {
+    const updatedBoxes = [...boxes];
+    (updatedBoxes[index] as any)[field] = value;
+    setBoxes(updatedBoxes);
+  };
+
+  const addItem = () => {
+    const newItem: Item = {
+      name: `Item ${items.length + 1}`,
+      quantity: 1,
+      unit_value: 50,
+      weight: 1,
+    };
+    setItems([...items, newItem]);
+  };
+
+  const removeItem = (index: number) => {
+    if (items.length > 1) {
+      setItems(items.filter((_, i) => i !== index));
+    }
+  };
+
+  const updateItem = (index: number, field: keyof Item, value: string | number) => {
+    const updatedItems = [...items];
+    (updatedItems[index] as any)[field] = value;
+    setItems(updatedItems);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const payload: QuotationRequest = {
+        ...formData,
+        boxes,
+        items: formData.type === "advanced" || formData.type === "items" ? items : undefined,
+      } as QuotationRequest;
+
+      const response = await fetch("/api/quotation", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data: QuotationResponse = await response.json();
+
+      if (data.status === "success") {
+        onSubmit(data);
+      } else {
+        console.error("Error:", data.message);
+        alert(`Erro: ${data.message}`);
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      alert("Erro ao enviar cotação");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <Card className="shadow-lg">
+        <CardHeader>
+          <CardTitle>Nova Cotação</CardTitle>
+          <CardDescription>
+            Preencha os dados para simular o frete
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Configurações Básicas */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-lg">Configurações</h3>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="object">Tipo de Objeto</Label>
+                <Select
+                  value={formData.object}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, object: value as "doc" | "not_doc" })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="not_doc">Não Documento</SelectItem>
+                    <SelectItem value="doc">Documento</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="type">Tipo de Cotação</Label>
+                <Select
+                  value={formData.type}
+                  onValueChange={(value) =>
+                    setFormData({
+                      ...formData,
+                      type: value as "simple" | "advanced" | "items",
+                    })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="simple">Simples</SelectItem>
+                    <SelectItem value="advanced">Avançado</SelectItem>
+                    <SelectItem value="items">Por Itens</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="tax">Quem Paga</Label>
+                <Select
+                  value={formData.tax}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, tax: value as "sender" | "receiver" })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="sender">Remetente</SelectItem>
+                    <SelectItem value="receiver">Destinatário</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="measurement">Medidas</Label>
+                <Select
+                  value={formData.measurement}
+                  onValueChange={(value) =>
+                    setFormData({
+                      ...formData,
+                      measurement: value as "metric" | "imperial",
+                    })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="metric">Métrico (cm/kg)</SelectItem>
+                    <SelectItem value="imperial">Imperial (in/lb)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <input
+                type="checkbox"
+                id="insurance"
+                checked={formData.insurance}
+                onChange={(e) =>
+                  setFormData({ ...formData, insurance: e.target.checked })
+                }
+                className="rounded border-gray-300"
+              />
+              <Label htmlFor="insurance" className="cursor-pointer">
+                Incluir Seguro
+              </Label>
+            </div>
+          </div>
+
+          {/* Endereços */}
+          <div className="space-y-4">
+            <h3 className="font-semibold text-lg">Endereços</h3>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>País Origem</Label>
+                <Input
+                  placeholder="US"
+                  value={formData.address_sender?.country_code || ""}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      address_sender: {
+                        ...formData.address_sender,
+                        country_code: e.target.value,
+                      },
+                    })
+                  }
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Estado Origem</Label>
+                <Input
+                  placeholder="CA"
+                  value={formData.address_sender?.state_code || ""}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      address_sender: {
+                        ...formData.address_sender,
+                        state_code: e.target.value,
+                      },
+                    })
+                  }
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>País Destino</Label>
+                <Input
+                  placeholder="BR"
+                  value={formData.address_receiver?.country_code || ""}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      address_receiver: {
+                        ...formData.address_receiver,
+                        country_code: e.target.value,
+                      },
+                    })
+                  }
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Estado Destino</Label>
+                <Input
+                  placeholder="SP"
+                  value={formData.address_receiver?.state_code || ""}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      address_receiver: {
+                        ...formData.address_receiver,
+                        state_code: e.target.value,
+                      },
+                    })
+                  }
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Caixas */}
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <h3 className="font-semibold text-lg">Caixas</h3>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addBox}
+              >
+                <Plus className="h-4 w-4 mr-2" />
+                Adicionar Caixa
+              </Button>
+            </div>
+
+            {boxes.map((box, index) => (
+              <Card key={index} className="p-4 relative">
+                {boxes.length > 1 && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    className="absolute top-2 right-2"
+                    onClick={() => removeBox(index)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                )}
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="col-span-2">
+                    <Label>Nome da Caixa</Label>
+                    <Input
+                      value={box.name}
+                      onChange={(e) => updateBox(index, "name", e.target.value)}
+                      placeholder="Ex: Caixa Grande"
+                    />
+                  </div>
+
+                  <div>
+                    <Label>Altura (cm)</Label>
+                    <Input
+                      type="number"
+                      value={box.height}
+                      onChange={(e) =>
+                        updateBox(index, "height", parseFloat(e.target.value))
+                      }
+                      min="1"
+                      step="0.1"
+                    />
+                  </div>
+
+                  <div>
+                    <Label>Largura (cm)</Label>
+                    <Input
+                      type="number"
+                      value={box.width}
+                      onChange={(e) =>
+                        updateBox(index, "width", parseFloat(e.target.value))
+                      }
+                      min="1"
+                      step="0.1"
+                    />
+                  </div>
+
+                  <div>
+                    <Label>Profundidade (cm)</Label>
+                    <Input
+                      type="number"
+                      value={box.depth}
+                      onChange={(e) =>
+                        updateBox(index, "depth", parseFloat(e.target.value))
+                      }
+                      min="1"
+                      step="0.1"
+                    />
+                  </div>
+
+                  <div>
+                    <Label>Peso (kg)</Label>
+                    <Input
+                      type="number"
+                      value={box.weight}
+                      onChange={(e) =>
+                        updateBox(index, "weight", parseFloat(e.target.value))
+                      }
+                      min="0.1"
+                      step="0.1"
+                    />
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+
+          {/* Itens (se tipo não for simples) */}
+          {formData.type !== "simple" && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <h3 className="font-semibold text-lg">Itens</h3>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={addItem}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Adicionar Item
+                </Button>
+              </div>
+
+              {items.map((item, index) => (
+                <Card key={index} className="p-4 relative">
+                  {items.length > 1 && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      className="absolute top-2 right-2"
+                      onClick={() => removeItem(index)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
+                  )}
+
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="col-span-2">
+                      <Label>Nome do Item</Label>
+                      <Input
+                        value={item.name}
+                        onChange={(e) => updateItem(index, "name", e.target.value)}
+                        placeholder="Ex: Produto Eletrônico"
+                      />
+                    </div>
+
+                    <div>
+                      <Label>Quantidade</Label>
+                      <Input
+                        type="number"
+                        value={item.quantity}
+                        onChange={(e) =>
+                          updateItem(index, "quantity", parseInt(e.target.value))
+                        }
+                        min="1"
+                      />
+                    </div>
+
+                    <div>
+                      <Label>Valor Unitário ($)</Label>
+                      <Input
+                        type="number"
+                        value={item.unit_value}
+                        onChange={(e) =>
+                          updateItem(index, "unit_value", parseFloat(e.target.value))
+                        }
+                        min="0.01"
+                        step="0.01"
+                      />
+                    </div>
+
+                    <div>
+                      <Label>Peso (kg)</Label>
+                      <Input
+                        type="number"
+                        value={item.weight}
+                        onChange={(e) =>
+                          updateItem(index, "weight", parseFloat(e.target.value))
+                        }
+                        min="0.1"
+                        step="0.1"
+                      />
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          )}
+
+          {/* Botão Submit */}
+          <Button
+            type="submit"
+            className="w-full"
+            size="lg"
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <>
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                Consultando...
+              </>
+            ) : (
+              <>
+                <Package className="h-4 w-4 mr-2" />
+                Simular Frete
+              </>
+            )}
+          </Button>
+        </CardContent>
+      </Card>
+    </form>
+  );
+}
