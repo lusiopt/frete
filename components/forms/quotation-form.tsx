@@ -48,6 +48,7 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
         width: 15,
         depth: 20,
         weight: 2.5,
+        price: 0,
       },
     ],
     items: [
@@ -91,6 +92,7 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
       width: 15,
       depth: 20,
       weight: 2.5,
+      price: 0,
     };
     setBoxes([...boxes, newBox]);
   };
@@ -519,6 +521,20 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
                       }
                       min="0.1"
                       step="0.1"
+                    />
+                  </div>
+
+                  <div>
+                    <Label>Valor da Caixa ($)</Label>
+                    <Input
+                      type="number"
+                      value={box.price || 0}
+                      onChange={(e) =>
+                        updateBox(index, "price", parseFloat(e.target.value) || 0)
+                      }
+                      min="0"
+                      step="0.01"
+                      placeholder="0.00"
                     />
                   </div>
                 </div>
