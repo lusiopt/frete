@@ -38,35 +38,35 @@ export function QuotationResults({ data }: QuotationResultsProps) {
   return (
     <div className="space-y-6">
       {/* Resumo */}
-      <Card className="shadow-lg bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
+      <Card className="shadow-lg border-primary/20">
         <CardHeader>
-          <CardTitle className="text-blue-900">Resumo da Cotação</CardTitle>
+          <CardTitle className="text-primary">Resumo da Cotação</CardTitle>
           <CardDescription>
             {data.data.carriers.length} transportadora(s) encontrada(s)
           </CardDescription>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-4">
-            <div className="bg-white p-4 rounded-lg shadow-sm">
+            <div className="bg-card p-4 rounded-lg shadow-sm border">
               <div className="flex items-center gap-2 text-green-700 mb-2">
                 <TrendingUp className="h-4 w-4" />
                 <span className="text-sm font-medium">Mais Barato</span>
               </div>
-              <p className="text-2xl font-bold text-slate-900">
+              <p className="text-2xl font-bold text-foreground">
                 {formatCurrency(cheapest.currency_payment_amount, data.data.currency_payment)}
               </p>
-              <p className="text-sm text-slate-600">{cheapest.name}</p>
+              <p className="text-sm text-muted-foreground">{cheapest.name}</p>
             </div>
 
-            <div className="bg-white p-4 rounded-lg shadow-sm">
-              <div className="flex items-center gap-2 text-blue-700 mb-2">
+            <div className="bg-card p-4 rounded-lg shadow-sm border">
+              <div className="flex items-center gap-2 text-primary mb-2">
                 <Clock className="h-4 w-4" />
                 <span className="text-sm font-medium">Mais Rápido</span>
               </div>
-              <p className="text-2xl font-bold text-slate-900">
+              <p className="text-2xl font-bold text-foreground">
                 {fastest.transit_days} dias
               </p>
-              <p className="text-sm text-slate-600">{fastest.name}</p>
+              <p className="text-sm text-muted-foreground">{fastest.name}</p>
             </div>
           </div>
         </CardContent>
@@ -74,7 +74,7 @@ export function QuotationResults({ data }: QuotationResultsProps) {
 
       {/* Cards de Transportadoras */}
       <div className="space-y-4">
-        <h3 className="text-lg font-semibold text-slate-900">
+        <h3 className="text-lg font-semibold text-foreground">
           Todas as Opções
         </h3>
 
@@ -93,7 +93,7 @@ export function QuotationResults({ data }: QuotationResultsProps) {
               <div className="flex items-start justify-between mb-4">
                 <div className="flex items-center gap-4">
                   {carrier.url_image && (
-                    <div className="relative w-24 h-12 bg-white rounded border p-2">
+                    <div className="relative w-24 h-12 bg-card rounded border p-2">
                       <Image
                         src={carrier.url_image}
                         alt={carrier.name}
@@ -104,7 +104,7 @@ export function QuotationResults({ data }: QuotationResultsProps) {
                     </div>
                   )}
                   <div>
-                    <h4 className="text-xl font-bold text-slate-900">
+                    <h4 className="text-xl font-bold text-foreground">
                       {carrier.name}
                     </h4>
                     {carrier.code === cheapest.code && (
@@ -114,7 +114,7 @@ export function QuotationResults({ data }: QuotationResultsProps) {
                     )}
                     {carrier.code === fastest.code &&
                       carrier.code !== cheapest.code && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
                           Mais Rápido
                         </span>
                       )}
@@ -122,13 +122,13 @@ export function QuotationResults({ data }: QuotationResultsProps) {
                 </div>
 
                 <div className="text-right">
-                  <p className="text-3xl font-bold text-slate-900">
+                  <p className="text-3xl font-bold text-foreground">
                     {formatCurrency(
                       carrier.currency_payment_amount,
                       data.data.currency_payment
                     )}
                   </p>
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm text-muted-foreground">
                     {formatCurrency(
                       carrier.currency_quote_amount,
                       data.data.currency_quote
@@ -139,17 +139,17 @@ export function QuotationResults({ data }: QuotationResultsProps) {
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t">
                 <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-slate-500" />
+                  <Clock className="h-4 w-4 text-muted-foreground" />
                   <div>
-                    <p className="text-xs text-slate-500">Prazo</p>
+                    <p className="text-xs text-muted-foreground">Prazo</p>
                     <p className="font-semibold">{carrier.transit_days} dias</p>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <Package className="h-4 w-4 text-slate-500" />
+                  <Package className="h-4 w-4 text-muted-foreground" />
                   <div>
-                    <p className="text-xs text-slate-500">Peso</p>
+                    <p className="text-xs text-muted-foreground">Peso</p>
                     <p className="font-semibold">
                       {formatWeight(carrier.weight_details.weight)}
                     </p>
@@ -157,9 +157,9 @@ export function QuotationResults({ data }: QuotationResultsProps) {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4 text-slate-500" />
+                  <TrendingUp className="h-4 w-4 text-muted-foreground" />
                   <div>
-                    <p className="text-xs text-slate-500">Frete</p>
+                    <p className="text-xs text-muted-foreground">Frete</p>
                     <p className="font-semibold">
                       {formatCurrency(carrier.freight_final, data.data.currency_quote)}
                     </p>
@@ -168,9 +168,9 @@ export function QuotationResults({ data }: QuotationResultsProps) {
 
                 {parseFloat(carrier.insurance_final) > 0 && (
                   <div className="flex items-center gap-2">
-                    <Shield className="h-4 w-4 text-slate-500" />
+                    <Shield className="h-4 w-4 text-muted-foreground" />
                     <div>
-                      <p className="text-xs text-slate-500">Seguro</p>
+                      <p className="text-xs text-muted-foreground">Seguro</p>
                       <p className="font-semibold">
                         {formatCurrency(carrier.insurance_final, data.data.currency_quote)}
                       </p>
@@ -179,7 +179,7 @@ export function QuotationResults({ data }: QuotationResultsProps) {
                 )}
               </div>
 
-              <div className="mt-4 pt-4 border-t text-sm text-slate-500">
+              <div className="mt-4 pt-4 border-t text-sm text-muted-foreground">
                 <p>
                   Válido até:{" "}
                   {new Date(carrier.valid_until).toLocaleString("pt-BR")}

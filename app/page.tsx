@@ -10,13 +10,13 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-8 px-4">
+    <main className="min-h-screen bg-background py-8 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-slate-900 mb-2">
+          <h1 className="text-4xl font-bold text-foreground mb-2">
             Simulador de Frete Internacional
           </h1>
-          <p className="text-slate-600">
+          <p className="text-muted-foreground">
             Compare preços e prazos das principais transportadoras
           </p>
         </div>
@@ -32,21 +32,21 @@ export default function Home() {
 
           <div>
             {isLoading ? (
-              <div className="bg-white rounded-lg shadow-lg p-8">
+              <div className="bg-card rounded-lg shadow-lg p-8">
                 <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-900"></div>
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
                 </div>
-                <p className="text-center mt-4 text-slate-600">
+                <p className="text-center mt-4 text-muted-foreground">
                   Buscando cotações...
                 </p>
               </div>
             ) : results ? (
               <QuotationResults data={results} />
             ) : (
-              <div className="bg-white rounded-lg shadow-lg p-8">
-                <div className="text-center text-slate-500">
+              <div className="bg-card rounded-lg shadow-lg p-8">
+                <div className="text-center text-muted-foreground">
                   <svg
-                    className="mx-auto h-24 w-24 text-slate-300 mb-4"
+                    className="mx-auto h-24 w-24 text-muted mb-4"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
