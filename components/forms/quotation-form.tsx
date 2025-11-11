@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -84,6 +84,31 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
   ]);
 
   const [envelopeType, setEnvelopeType] = useState<string>("envelope_a4");
+
+  // Atualiza dimensões da caixa quando tipo de envelope mudar
+  useEffect(() => {
+    if (formData.object === "doc" && boxes.length > 0) {
+      const envelope = ENVELOPE_TYPES.find(e => e.value === envelopeType);
+      if (envelope) {
+        // Extrair dimensões do formato "22 x 31 cm"
+        const dims = envelope.dimensions.match(/(\d+(?:\.\d+)?)/g);
+        if (dims && dims.length >= 2) {
+          setBoxes(prevBoxes => {
+            const updatedBoxes = [...prevBoxes];
+            updatedBoxes[0] = {
+              ...updatedBoxes[0],
+              name: envelope.label,
+              height: 0.5, // Altura padrão para envelope (0.5cm = ~5mm)
+              width: parseFloat(dims[0]),
+              depth: parseFloat(dims[1]),
+              weight: 0.1, // Peso padrão para envelope (100g)
+            };
+            return updatedBoxes;
+          });
+        }
+      }
+    }
+  }, [envelopeType, formData.object]);
 
   const addBox = () => {
     const newBox: Box = {
