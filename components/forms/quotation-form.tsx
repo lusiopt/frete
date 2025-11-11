@@ -76,6 +76,9 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
       quantity: 1,
       unit_value: 50,
       weight: 2.5,
+      box_id: 0,
+      country_code: "BR",
+      hscode: "",
     },
   ]);
 
@@ -110,6 +113,9 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
       quantity: 1,
       unit_value: 50,
       weight: 1,
+      box_id: 0,
+      country_code: "BR",
+      hscode: "",
     };
     setItems([...items, newItem]);
   };
@@ -557,6 +563,58 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
                         value={item.name}
                         onChange={(e) => updateItem(index, "name", e.target.value)}
                         placeholder="Ex: Produto Eletrônico"
+                      />
+                    </div>
+
+                    <div className="col-span-2">
+                      <Label>Caixa</Label>
+                      <Select
+                        value={item.box_id?.toString() || "0"}
+                        onValueChange={(value) =>
+                          updateItem(index, "box_id", parseInt(value))
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Selecione a caixa" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {boxes.map((box, boxIndex) => (
+                            <SelectItem key={boxIndex} value={boxIndex.toString()}>
+                              {box.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <Label>País de Origem</Label>
+                      <Select
+                        value={item.country_code || "BR"}
+                        onValueChange={(value) =>
+                          updateItem(index, "country_code", value)
+                        }
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {COUNTRIES.map((country) => (
+                            <SelectItem key={country.code} value={country.code}>
+                              {country.name}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+
+                    <div>
+                      <Label>Código HS (NCM)</Label>
+                      <Input
+                        value={item.hscode || ""}
+                        onChange={(e) => updateItem(index, "hscode", e.target.value)}
+                        placeholder="Ex: 8517.62.55"
+                        maxLength={10}
                       />
                     </div>
 
