@@ -89,11 +89,11 @@ export function QuotationResults({ data }: QuotationResultsProps) {
                 : ""
             }`}
           >
-            <CardContent className="pt-6">
-              <div className="flex items-start justify-between mb-4">
-                <div className="flex items-center gap-4">
+            <CardContent className="p-4">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-3">
                   {carrier.url_image && (
-                    <div className="relative w-24 h-12 bg-card rounded border p-2">
+                    <div className="relative w-16 h-8 bg-card rounded border p-1 flex-shrink-0">
                       <Image
                         src={carrier.url_image}
                         alt={carrier.name}
@@ -104,17 +104,17 @@ export function QuotationResults({ data }: QuotationResultsProps) {
                     </div>
                   )}
                   <div>
-                    <h4 className="text-xl font-bold text-foreground">
+                    <h4 className="text-base font-bold text-foreground">
                       {carrier.name}
                     </h4>
                     {carrier.code === cheapest.code && (
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                         Mais Barato
                       </span>
                     )}
                     {carrier.code === fastest.code &&
                       carrier.code !== cheapest.code && (
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                        <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
                           Mais Rápido
                         </span>
                       )}
@@ -122,13 +122,13 @@ export function QuotationResults({ data }: QuotationResultsProps) {
                 </div>
 
                 <div className="text-right">
-                  <p className="text-3xl font-bold text-foreground">
+                  <p className="text-2xl font-bold text-foreground">
                     {formatCurrency(
                       carrier.currency_payment_amount,
                       data.data.currency_payment
                     )}
                   </p>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs text-muted-foreground">
                     {formatCurrency(
                       carrier.currency_quote_amount,
                       data.data.currency_quote
@@ -137,56 +137,49 @@ export function QuotationResults({ data }: QuotationResultsProps) {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t">
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-muted-foreground" />
+              <div className="grid grid-cols-3 gap-3 pt-3 border-t">
+                <div className="flex items-center gap-1.5">
+                  <Clock className="h-3.5 w-3.5 text-muted-foreground" />
                   <div>
                     <p className="text-xs text-muted-foreground">Prazo</p>
-                    <p className="font-semibold">{carrier.transit_days} dias</p>
+                    <p className="text-sm font-semibold">{carrier.transit_days} dias</p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <Package className="h-4 w-4 text-muted-foreground" />
+                <div className="flex items-center gap-1.5">
+                  <Package className="h-3.5 w-3.5 text-muted-foreground" />
                   <div>
                     <p className="text-xs text-muted-foreground">Peso</p>
-                    <p className="font-semibold">
+                    <p className="text-sm font-semibold">
                       {formatWeight(carrier.weight_details.weight)}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2">
-                  <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                <div className="flex items-center gap-1.5">
+                  <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" />
                   <div>
                     <p className="text-xs text-muted-foreground">Frete</p>
-                    <p className="font-semibold">
+                    <p className="text-sm font-semibold">
                       {formatCurrency(carrier.freight_final, data.data.currency_quote)}
                     </p>
                   </div>
                 </div>
-
-                {parseFloat(carrier.insurance_final) > 0 && (
-                  <div className="flex items-center gap-2">
-                    <Shield className="h-4 w-4 text-muted-foreground" />
-                    <div>
-                      <p className="text-xs text-muted-foreground">Seguro</p>
-                      <p className="font-semibold">
-                        {formatCurrency(carrier.insurance_final, data.data.currency_quote)}
-                      </p>
-                    </div>
-                  </div>
-                )}
               </div>
 
-              <div className="mt-4 pt-4 border-t text-sm text-muted-foreground">
-                <p>
-                  Válido até:{" "}
-                  {new Date(carrier.valid_until).toLocaleString("pt-BR")}
-                </p>
-                <p className="text-xs mt-1">
+              <div className="mt-3 pt-3 border-t text-xs text-muted-foreground flex items-center justify-between">
+                <span>
+                  Válido até: {new Date(carrier.valid_until).toLocaleString("pt-BR", {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
+                </span>
+                <span>
                   Tipo de peso: {carrier.weight_details.type === "real" ? "Real" : "Cubado"}
-                </p>
+                </span>
               </div>
             </CardContent>
           </Card>
