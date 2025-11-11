@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select";
 import { Plus, Trash2, Package } from "lucide-react";
 import type { QuotationRequest, QuotationResponse, Box, Item } from "@/types/shipsmart";
+import { COUNTRIES, ENVELOPE_TYPES, getStatesByCountry } from "@/lib/address-data";
 
 interface QuotationFormProps {
   onSubmit: (data: QuotationResponse) => void;
@@ -77,6 +78,8 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
       weight: 2.5,
     },
   ]);
+
+  const [envelopeType, setEnvelopeType] = useState<string>("envelope_a4");
 
   const addBox = () => {
     const newBox: Box = {
@@ -269,6 +272,28 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
             </div>
           </div>
 
+          {/* Campo condicional para tipo de envelope quando for documento */}
+          {formData.object === "doc" && (
+            <div className="space-y-2">
+              <Label htmlFor="envelope">Tipo de Envelope</Label>
+              <Select
+                value={envelopeType}
+                onValueChange={setEnvelopeType}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {ENVELOPE_TYPES.map((env) => (
+                    <SelectItem key={env.value} value={env.value}>
+                      {env.label} ({env.dimensions})
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
           {/* Endereços */}
           <div className="space-y-4">
             <h3 className="font-semibold text-lg">Endereços</h3>
@@ -276,70 +301,114 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <Label>País Origem</Label>
-                <Input
-                  placeholder="US"
-                  value={formData.address_sender?.country_code || ""}
-                  onChange={(e) =>
+                <Select
+                  value={formData.address_sender?.country_code || "US"}
+                  onValueChange={(value) =>
                     setFormData({
                       ...formData,
                       address_sender: {
                         ...formData.address_sender,
-                        country_code: e.target.value,
+                        country_code: value,
+                        state_code: "", // Reset state when country changes
                       },
                     })
                   }
-                />
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {COUNTRIES.map((country) => (
+                      <SelectItem key={country.code} value={country.code}>
+                        {country.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">
                 <Label>Estado Origem</Label>
-                <Input
-                  placeholder="CA"
+                <Select
                   value={formData.address_sender?.state_code || ""}
-                  onChange={(e) =>
+                  onValueChange={(value) =>
                     setFormData({
                       ...formData,
                       address_sender: {
                         ...formData.address_sender,
-                        state_code: e.target.value,
+                        state_code: value,
                       },
                     })
                   }
-                />
+                  disabled={!formData.address_sender?.country_code}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o estado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {getStatesByCountry(formData.address_sender?.country_code || "").map((state) => (
+                      <SelectItem key={state.code} value={state.code}>
+                        {state.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">
                 <Label>País Destino</Label>
-                <Input
-                  placeholder="BR"
-                  value={formData.address_receiver?.country_code || ""}
-                  onChange={(e) =>
+                <Select
+                  value={formData.address_receiver?.country_code || "BR"}
+                  onValueChange={(value) =>
                     setFormData({
                       ...formData,
                       address_receiver: {
                         ...formData.address_receiver,
-                        country_code: e.target.value,
+                        country_code: value,
+                        state_code: "", // Reset state when country changes
                       },
                     })
                   }
-                />
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {COUNTRIES.map((country) => (
+                      <SelectItem key={country.code} value={country.code}>
+                        {country.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">
                 <Label>Estado Destino</Label>
-                <Input
-                  placeholder="SP"
+                <Select
                   value={formData.address_receiver?.state_code || ""}
-                  onChange={(e) =>
+                  onValueChange={(value) =>
                     setFormData({
                       ...formData,
                       address_receiver: {
                         ...formData.address_receiver,
-                        state_code: e.target.value,
+                        state_code: value,
                       },
                     })
                   }
-                />
+                  disabled={!formData.address_receiver?.country_code}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Selecione o estado" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {getStatesByCountry(formData.address_receiver?.country_code || "").map((state) => (
+                      <SelectItem key={state.code} value={state.code}>
+                        {state.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </div>
