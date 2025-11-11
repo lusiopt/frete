@@ -166,20 +166,13 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
     setIsLoading(true);
 
     try {
-      // DEBUG: Log do estado boxes antes de construir o payload
-      console.log("🔍 DEBUG - Estado boxes:", JSON.stringify(boxes, null, 2));
-      console.log("🔍 DEBUG - boxes[0].price:", boxes[0]?.price);
-
       const payload: QuotationRequest = {
         ...formData,
         boxes,
         items: (formData.type === "advanced" || formData.type === "items") && formData.object !== "doc" ? items : undefined,
       } as QuotationRequest;
 
-      // DEBUG: Log do payload completo
-      console.log("📤 DEBUG - Payload enviado:", JSON.stringify(payload, null, 2));
-
-      const response = await fetch("/api/quotation", {
+      const response = await fetch("/frete/api/quotation", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -189,22 +182,14 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
 
       const data: QuotationResponse = await response.json();
 
-      // DEBUG: Log da resposta completa
-      console.log("📥 DEBUG - Resposta completa:", JSON.stringify(data, null, 2));
-
       if (data.status === "success") {
         onSubmit(data);
       } else {
-        console.error("❌ DEBUG - Erro retornado pela API:");
-        console.error("Status:", data.status);
-        console.error("Message:", data.message);
-        console.error("Data completo:", JSON.stringify(data, null, 2));
+        console.error("Error:", data.message);
         alert(`Erro: ${data.message}`);
       }
     } catch (error) {
-      console.error("❌ DEBUG - Exceção capturada:", error);
-      console.error("Tipo do erro:", typeof error);
-      console.error("Erro stringified:", JSON.stringify(error, null, 2));
+      console.error("Error submitting form:", error);
       alert("Erro ao enviar cotação");
     } finally {
       setIsLoading(false);
