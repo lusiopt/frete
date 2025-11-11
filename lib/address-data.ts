@@ -323,6 +323,176 @@ export const CA_PROVINCES = [
   { code: "YT", name: "Yukon" },
 ];
 
+// Distritos de Portugal (18 distritos + 2 regiões autônomas)
+export const PT_DISTRICTS = [
+  { code: "01", name: "Aveiro" },
+  { code: "02", name: "Beja" },
+  { code: "03", name: "Braga" },
+  { code: "04", name: "Bragança" },
+  { code: "05", name: "Castelo Branco" },
+  { code: "06", name: "Coimbra" },
+  { code: "07", name: "Évora" },
+  { code: "08", name: "Faro" },
+  { code: "09", name: "Guarda" },
+  { code: "10", name: "Leiria" },
+  { code: "11", name: "Lisboa" },
+  { code: "12", name: "Portalegre" },
+  { code: "13", name: "Porto" },
+  { code: "14", name: "Santarém" },
+  { code: "15", name: "Setúbal" },
+  { code: "16", name: "Viana do Castelo" },
+  { code: "17", name: "Vila Real" },
+  { code: "18", name: "Viseu" },
+  { code: "20", name: "Açores" },
+  { code: "30", name: "Madeira" },
+];
+
+// Comunidades Autônomas da Espanha
+export const ES_COMMUNITIES = [
+  { code: "AN", name: "Andaluzia" },
+  { code: "AR", name: "Aragão" },
+  { code: "AS", name: "Astúrias" },
+  { code: "IB", name: "Ilhas Baleares" },
+  { code: "CN", name: "Ilhas Canárias" },
+  { code: "CB", name: "Cantábria" },
+  { code: "CL", name: "Castela e Leão" },
+  { code: "CM", name: "Castela-La Mancha" },
+  { code: "CT", name: "Catalunha" },
+  { code: "EX", name: "Extremadura" },
+  { code: "GA", name: "Galiza" },
+  { code: "MD", name: "Madrid" },
+  { code: "MC", name: "Múrcia" },
+  { code: "NC", name: "Navarra" },
+  { code: "PV", name: "País Basco" },
+  { code: "RI", name: "La Rioja" },
+  { code: "VC", name: "Comunidade Valenciana" },
+];
+
+// Regiões da França
+export const FR_REGIONS = [
+  { code: "ARA", name: "Auvergne-Rhône-Alpes" },
+  { code: "BFC", name: "Bourgogne-Franche-Comté" },
+  { code: "BRE", name: "Bretanha" },
+  { code: "CVL", name: "Centre-Val de Loire" },
+  { code: "COR", name: "Córsega" },
+  { code: "GES", name: "Grand Est" },
+  { code: "HDF", name: "Hauts-de-France" },
+  { code: "IDF", name: "Île-de-France" },
+  { code: "NOR", name: "Normandia" },
+  { code: "NAQ", name: "Nouvelle-Aquitaine" },
+  { code: "OCC", name: "Occitânia" },
+  { code: "PDL", name: "Pays de la Loire" },
+  { code: "PAC", name: "Provence-Alpes-Côte d'Azur" },
+];
+
+// Estados da Alemanha (Länder)
+export const DE_STATES = [
+  { code: "BW", name: "Baden-Württemberg" },
+  { code: "BY", name: "Baviera" },
+  { code: "BE", name: "Berlim" },
+  { code: "BB", name: "Brandemburgo" },
+  { code: "HB", name: "Bremen" },
+  { code: "HH", name: "Hamburgo" },
+  { code: "HE", name: "Hesse" },
+  { code: "MV", name: "Mecklemburgo-Pomerânia Ocidental" },
+  { code: "NI", name: "Baixa Saxônia" },
+  { code: "NW", name: "Renânia do Norte-Vestfália" },
+  { code: "RP", name: "Renânia-Palatinado" },
+  { code: "SL", name: "Sarre" },
+  { code: "SN", name: "Saxônia" },
+  { code: "ST", name: "Saxônia-Anhalt" },
+  { code: "SH", name: "Schleswig-Holstein" },
+  { code: "TH", name: "Turíngia" },
+];
+
+// Regiões da Itália
+export const IT_REGIONS = [
+  { code: "ABR", name: "Abruzzo" },
+  { code: "BAS", name: "Basilicata" },
+  { code: "CAL", name: "Calábria" },
+  { code: "CAM", name: "Campânia" },
+  { code: "EMR", name: "Emília-Romanha" },
+  { code: "FVG", name: "Friuli-Venezia Giulia" },
+  { code: "LAZ", name: "Lácio" },
+  { code: "LIG", name: "Ligúria" },
+  { code: "LOM", name: "Lombardia" },
+  { code: "MAR", name: "Marche" },
+  { code: "MOL", name: "Molise" },
+  { code: "PIE", name: "Piemonte" },
+  { code: "PUG", name: "Apúlia" },
+  { code: "SAR", name: "Sardenha" },
+  { code: "SIC", name: "Sicília" },
+  { code: "TOS", name: "Toscana" },
+  { code: "TAA", name: "Trentino-Alto Ádige" },
+  { code: "UMB", name: "Úmbria" },
+  { code: "VDA", name: "Vale de Aosta" },
+  { code: "VEN", name: "Vêneto" },
+];
+
+// Províncias da Argentina
+export const AR_PROVINCES = [
+  { code: "BA", name: "Buenos Aires" },
+  { code: "CT", name: "Catamarca" },
+  { code: "CC", name: "Chaco" },
+  { code: "CH", name: "Chubut" },
+  { code: "CB", name: "Córdoba" },
+  { code: "CR", name: "Corrientes" },
+  { code: "ER", name: "Entre Ríos" },
+  { code: "FO", name: "Formosa" },
+  { code: "JY", name: "Jujuy" },
+  { code: "LP", name: "La Pampa" },
+  { code: "LR", name: "La Rioja" },
+  { code: "MZ", name: "Mendoza" },
+  { code: "MN", name: "Misiones" },
+  { code: "NQ", name: "Neuquén" },
+  { code: "RN", name: "Río Negro" },
+  { code: "SA", name: "Salta" },
+  { code: "SJ", name: "San Juan" },
+  { code: "SL", name: "San Luis" },
+  { code: "SC", name: "Santa Cruz" },
+  { code: "SF", name: "Santa Fe" },
+  { code: "SE", name: "Santiago del Estero" },
+  { code: "TF", name: "Tierra del Fuego" },
+  { code: "TM", name: "Tucumán" },
+  { code: "CF", name: "Ciudad Autónoma de Buenos Aires" },
+];
+
+// Estados do México
+export const MX_STATES = [
+  { code: "AGU", name: "Aguascalientes" },
+  { code: "BCN", name: "Baja California" },
+  { code: "BCS", name: "Baja California Sur" },
+  { code: "CAM", name: "Campeche" },
+  { code: "CHP", name: "Chiapas" },
+  { code: "CHH", name: "Chihuahua" },
+  { code: "COA", name: "Coahuila" },
+  { code: "COL", name: "Colima" },
+  { code: "DIF", name: "Cidade do México" },
+  { code: "DUR", name: "Durango" },
+  { code: "GUA", name: "Guanajuato" },
+  { code: "GRO", name: "Guerrero" },
+  { code: "HID", name: "Hidalgo" },
+  { code: "JAL", name: "Jalisco" },
+  { code: "MEX", name: "Estado do México" },
+  { code: "MIC", name: "Michoacán" },
+  { code: "MOR", name: "Morelos" },
+  { code: "NAY", name: "Nayarit" },
+  { code: "NLE", name: "Nuevo León" },
+  { code: "OAX", name: "Oaxaca" },
+  { code: "PUE", name: "Puebla" },
+  { code: "QUE", name: "Querétaro" },
+  { code: "ROO", name: "Quintana Roo" },
+  { code: "SLP", name: "San Luis Potosí" },
+  { code: "SIN", name: "Sinaloa" },
+  { code: "SON", name: "Sonora" },
+  { code: "TAB", name: "Tabasco" },
+  { code: "TAM", name: "Tamaulipas" },
+  { code: "TLA", name: "Tlaxcala" },
+  { code: "VER", name: "Veracruz" },
+  { code: "YUC", name: "Yucatán" },
+  { code: "ZAC", name: "Zacatecas" },
+];
+
 // Tipos de envelope padrão (quando object = "doc")
 export const ENVELOPE_TYPES = [
   { value: "envelope_a4", label: "Envelope A4", dimensions: "22 x 31 cm" },
@@ -334,16 +504,33 @@ export const ENVELOPE_TYPES = [
   { value: "padded_envelope", label: "Envelope Acolchoado", dimensions: "24 x 36 cm" },
 ];
 
-// Função helper para obter estados por país
+// Interface para definir divisões administrativas por país
+interface CountryDivisions {
+  label: string; // Nome do tipo de divisão (Estado, Distrito, Província, etc.)
+  divisions: Array<{ code: string; name: string }>;
+}
+
+// Mapeamento de divisões por país
+const DIVISIONS_BY_COUNTRY: Record<string, CountryDivisions> = {
+  PT: { label: "Distrito", divisions: PT_DISTRICTS },
+  ES: { label: "Comunidade Autônoma", divisions: ES_COMMUNITIES },
+  FR: { label: "Região", divisions: FR_REGIONS },
+  DE: { label: "Estado", divisions: DE_STATES },
+  IT: { label: "Região", divisions: IT_REGIONS },
+  AR: { label: "Província", divisions: AR_PROVINCES },
+  MX: { label: "Estado", divisions: MX_STATES },
+  US: { label: "Estado", divisions: US_STATES },
+  BR: { label: "Estado", divisions: BR_STATES },
+  CA: { label: "Província", divisions: CA_PROVINCES },
+};
+
+// Função helper para obter divisões por país
+export function getDivisionsByCountry(countryCode: string): CountryDivisions | null {
+  return DIVISIONS_BY_COUNTRY[countryCode] || null;
+}
+
+// Função legada para compatibilidade (deprecated)
 export function getStatesByCountry(countryCode: string) {
-  switch (countryCode) {
-    case "US":
-      return US_STATES;
-    case "BR":
-      return BR_STATES;
-    case "CA":
-      return CA_PROVINCES;
-    default:
-      return [];
-  }
+  const result = getDivisionsByCountry(countryCode);
+  return result ? result.divisions : [];
 }

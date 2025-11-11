@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import { Plus, Trash2, Package } from "lucide-react";
 import type { QuotationRequest, QuotationResponse, Box, Item } from "@/types/shipsmart";
-import { COUNTRIES, ENVELOPE_TYPES, getStatesByCountry } from "@/lib/address-data";
+import { COUNTRIES, ENVELOPE_TYPES, getDivisionsByCountry } from "@/lib/address-data";
 
 interface QuotationFormProps {
   onSubmit: (data: QuotationResponse) => void;
@@ -327,33 +327,39 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label>Estado Origem</Label>
-                <Select
-                  value={formData.address_sender?.state_code || ""}
-                  onValueChange={(value) =>
-                    setFormData({
-                      ...formData,
-                      address_sender: {
-                        ...formData.address_sender,
-                        state_code: value,
-                      },
-                    })
-                  }
-                  disabled={!formData.address_sender?.country_code}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione o estado" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {getStatesByCountry(formData.address_sender?.country_code || "").map((state) => (
-                      <SelectItem key={state.code} value={state.code}>
-                        {state.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              {(() => {
+                const divisions = getDivisionsByCountry(formData.address_sender?.country_code || "");
+                if (!divisions) return null;
+
+                return (
+                  <div className="space-y-2">
+                    <Label>{divisions.label} Origem</Label>
+                    <Select
+                      value={formData.address_sender?.state_code || ""}
+                      onValueChange={(value) =>
+                        setFormData({
+                          ...formData,
+                          address_sender: {
+                            ...formData.address_sender,
+                            state_code: value,
+                          },
+                        })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder={`Selecione o ${divisions.label.toLowerCase()}`} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {divisions.divisions.map((division) => (
+                          <SelectItem key={division.code} value={division.code}>
+                            {division.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                );
+              })()}
 
               <div className="space-y-2">
                 <Label>País Destino</Label>
@@ -383,33 +389,39 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
                 </Select>
               </div>
 
-              <div className="space-y-2">
-                <Label>Estado Destino</Label>
-                <Select
-                  value={formData.address_receiver?.state_code || ""}
-                  onValueChange={(value) =>
-                    setFormData({
-                      ...formData,
-                      address_receiver: {
-                        ...formData.address_receiver,
-                        state_code: value,
-                      },
-                    })
-                  }
-                  disabled={!formData.address_receiver?.country_code}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Selecione o estado" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {getStatesByCountry(formData.address_receiver?.country_code || "").map((state) => (
-                      <SelectItem key={state.code} value={state.code}>
-                        {state.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+              {(() => {
+                const divisions = getDivisionsByCountry(formData.address_receiver?.country_code || "");
+                if (!divisions) return null;
+
+                return (
+                  <div className="space-y-2">
+                    <Label>{divisions.label} Destino</Label>
+                    <Select
+                      value={formData.address_receiver?.state_code || ""}
+                      onValueChange={(value) =>
+                        setFormData({
+                          ...formData,
+                          address_receiver: {
+                            ...formData.address_receiver,
+                            state_code: value,
+                          },
+                        })
+                      }
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder={`Selecione o ${divisions.label.toLowerCase()}`} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {divisions.divisions.map((division) => (
+                          <SelectItem key={division.code} value={division.code}>
+                            {division.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                );
+              })()}
             </div>
           </div>
 
