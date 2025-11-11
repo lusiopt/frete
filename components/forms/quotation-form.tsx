@@ -142,7 +142,7 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
       const payload: QuotationRequest = {
         ...formData,
         boxes,
-        items: formData.type === "advanced" || formData.type === "items" ? items : undefined,
+        items: (formData.type === "advanced" || formData.type === "items") && formData.object !== "doc" ? items : undefined,
       } as QuotationRequest;
 
       const response = await fetch("/api/quotation", {
@@ -542,8 +542,8 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
             ))}
           </div>
 
-          {/* Itens (se tipo não for simples) */}
-          {formData.type !== "simple" && (
+          {/* Itens (se tipo não for simples e não for documento) */}
+          {formData.type !== "simple" && formData.object !== "doc" && (
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold text-lg">Itens</h3>
