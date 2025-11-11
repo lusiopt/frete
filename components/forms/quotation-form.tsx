@@ -98,7 +98,7 @@ export function QuotationForm({ onSubmit, isLoading, setIsLoading }: QuotationFo
             updatedBoxes[0] = {
               ...updatedBoxes[0],
               name: envelope.label,
-              height: 0.5, // Altura padrão para envelope (0.5cm = ~5mm)
+              height: 1, // Altura mínima aceita pela API
               width: parseFloat(dims[0]),
               depth: parseFloat(dims[1]),
               weight: 0.1, // Peso padrão para envelope (100g)
